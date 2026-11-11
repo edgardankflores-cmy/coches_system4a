@@ -65,7 +65,7 @@ class App():
         self.asientos=Entry(self.ventana)
         self.asientos.pack(pady=5)
 
-        Button(self.ventana,text="Guardar",command=self.insertarController).pack(pady=10)
+        Button(self.ventana,text="Guardar",command=lambda: (self.insertarController())).pack(pady=10)
         Button(self.ventana,text="Regresar",command=self.menu_accionesView).pack(pady=10)
     
     def eliminarView(self):
@@ -74,7 +74,7 @@ class App():
         self.id=Entry(self.ventana)
         self.id.focus()
         self.id.pack(pady=5)
-        Button(self.ventana,text="Guardar",command=self.eliminarController).pack(pady=10)
+        Button(self.ventana,text="Guardar",command=lambda: (self.eliminarController())).pack(pady=10)
         Button(self.ventana,text="Regresar",command=self.menu_accionesView).pack(pady=10)
 
     def modificarView(self):
@@ -108,7 +108,7 @@ class App():
         self.asientos=Entry(self.ventana)
         self.asientos.pack(pady=5)
 
-        Button(self.ventana,text="Guardar",command=self.modificarController).pack(pady=10)
+        Button(self.ventana,text="Guardar",command=lambda: (self.modificarController())).pack(pady=10)
         Button(self.ventana,text="Regresar",command=self.menu_accionesView).pack(pady=10)
     
     def consultarView(self):
