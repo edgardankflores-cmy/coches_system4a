@@ -1,3 +1,5 @@
+from ast import Lambda
+
 from coches import cochesBD
 from tkinter import *
 from tkinter import messagebox
@@ -74,8 +76,14 @@ class App():
         self.id=Entry(self.ventana)
         self.id.focus()
         self.id.pack(pady=5)
-        Button(self.ventana,text="Guardar",command=lambda: (self.eliminarController())).pack(pady=10)
-        Button(self.ventana,text="Regresar",command=self.menu_accionesView).pack(pady=10)
+
+        Button(self.ventana,text="Buscar",command=lambda:self.buscar_controller("Eliminar")).pack(pady=5)
+
+        self.btn_eliminar=Button(self.ventana, text="Eliminar", state="disabled", command=lambda: (self.eliminar_controller(), self.eliminar_view())).pack(pady=10)
+        Button(self.ventana, text="Regresar", command=self.menu_acciones).pack(pady=5)
+        self.btn_eliminar.pack(
+        
+        )
 
     def modificarView(self):
         self.borrarPantallaView()
@@ -128,9 +136,18 @@ class App():
         del coche1
     def eliminarController(self):
         id = self.id.get()
-        respuesta=cochesBD.CochesBD.eliminar(id)
-        self.respuesta_sql(respuesta)
-    
+        resp=self.confirmacion_eliminar("eliminar")
+        if resp:
+            respuesta=cochesBD.CochesBD.eliminar(id)
+        else:
+            respuesta=False
+            self.respuesta_sql(respuesta)
+    def confirmacion_eliminar(self, tipo_accion):
+        resp=messagebox.askquestion(title="ATENCION!", message=f"¿Está seguro que desea {tipo_accion} el registro con ID: {self.id.get()}?")
+        if resp=="yes":
+            return True
+        else:
+            return False
     def consultarController(self,filas):
             registros=cochesBD.CochesBD.consultar()
             if len(registros) > 0:
@@ -148,9 +165,30 @@ class App():
         respuesta=coche1.actualizar(id)
         self.respuesta_sql(respuesta)
         del coche1
+    def buscar_controller(self, accion):
+        id = self.id.get()
+        resultado=cochesBD.CochesBD.buscar(id)
+        if resultado:
+            if accion == "Eliminar":
+                messagebox.showinfo(title="...Registro Encontrado...", message=f"Se encontró el registro con ID: {id}")
+            elif accion == "Modificar":
+                messagebox.showinfo(title="...Registro Encontrado...", message=f"Se encontró el registro con ID: {id}")
+        else:
+            messagebox.showerror(title="..Registro no encontrado..", message=f"No se encontró ningún registro con ID: {id}")
+    def cambiar_estado_btn(self, boton, estado):
+        if estado:
+            class tipo_accion:
+                ...
 
-
-
+            if tipo_accion=="eliminar":
+               self.btn_eliminar.config(state=NORMAL)
+            elif tipo_accion=="modificar":
+               self.btn_modificar.config(state=NORMAL)
+        else:
+            if tipo_accion=="eliminar":
+               self.btn_eliminar.config(state=DISABLED)
+            elif tipo_accion=="modificar":
+               self.btn_modificar.config(state=DISABLED) 
 if __name__ == "__main__":
     ventana=Tk()
     app = App(ventana)

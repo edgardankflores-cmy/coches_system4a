@@ -76,6 +76,28 @@ class CochesBD:
     @asientos.setter
     def asientos(self,asientos):
         self._asientos=asientos
+        def actualizar(self,id):
+             try: 
+                 if conexion.is_connected():
+                     cursor.execute("update camiones set marca=%s,color=%s, modelo=%s,velocidad=%s,potencia=%s,asientos=%s where id=%s",(self._marca,self._color,self._modelo,self._velocidad,self._potencia,self._asientos,self.__eje,self.__capacidadCarga,id))
+                     conexion.commit()
+                     return True
+                 else:
+                     return False
+             except Exception as e:
+                 print(f"Error al actualizar camion: {e}")
+                 return False
+        def buscar(id):
+            try:
+                cursor.execute("select * from coches where id=%s",(id,))
+                registro = cursor.fetchone()
+                if registro:
+                    return registro
+                else:
+                    return None
+            except Exception as e:
+                print(f"Error al buscar coche: {e}")
+                return None
 
 #Se pone en otro paquete
 # class CamionesBD(CochesBD):
